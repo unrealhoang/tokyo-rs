@@ -173,7 +173,7 @@ impl Game {
         let revived = self
             .state
             .dead
-            .drain_filter(|corpse| corpse.respawn <= now)
+            .extract_if(|corpse| corpse.respawn <= now)
             .map(|dead| dead.player)
             .map(|player| {
                 println!("revived player {}", player.id);
@@ -236,7 +236,7 @@ impl Game {
             }
         }
 
-        for mut player in self.state.players.drain_filter(|player| colliding_buf.contains(&player.id)) {
+        for mut player in self.state.players.extract_if(|player| colliding_buf.contains(&player.id)) {
             player.randomize(&mut self.rng, bounds);
             self.state
                 .dead
@@ -249,7 +249,7 @@ impl Game {
         let bounds = self.bounds();
 
         for bullet in &mut self.state.bullets {
-            let deceased = self.state.players.drain_filter(|player| {
+            let deceased = self.state.players.extract_if(|player| {
                 if player.is_colliding(bullet) && bullet.player_id != player.id {
                     println!(
                         "Player {} killed player {} at ({}, {})",

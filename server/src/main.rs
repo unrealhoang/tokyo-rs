@@ -1,4 +1,4 @@
-#![feature(drain_filter)]
+#![feature(extract_if)]
 
 #[macro_use]
 extern crate log;
